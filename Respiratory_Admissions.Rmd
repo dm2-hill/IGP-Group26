@@ -58,14 +58,3 @@ summary(model1)
 London Data
 
 In this section we are investigating the correlation between levels of pollutants and emergency Hospital Admissions relating to Respiratory Conditions in Children within Bristol.
-
-
-```{r}
-file_path <- "/Users/jordannelson/Documents/OneDrive - UWE Bristol Merla Pumffrey/Group Project/Data/London_Respiratory_hospital data.xlsx"
-#df_london <- read_excel(file_path)
-
-#Create subset of the data
-#dfLDN <- df_london[, c("Indicator_value", "NO2", "NO", "PM10","PM2_5")]
-#plot(dfLDN)}
-
-```
