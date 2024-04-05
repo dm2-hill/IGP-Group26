@@ -15,6 +15,11 @@ output:
 
 ```{r}
 
+Bristol
+
+In this section we are investigating the correlation between levels of pollutants and emergency Hospital Admissions relating to Respiratory Conditions in Children within Bristol.
+
+#Link to the dataset
 file_path <- "/Users/jordannelson/Documents/OneDrive - UWE Bristol Merla Pumffrey/Group Project/Data/Respiratory_Infection_data.xlsx"
 df <- read_excel(file_path)
 
@@ -30,6 +35,7 @@ corrplot(corrs, method="number")
 ```
 
 ```{r}
+#Investigate further the relationship between PM2.5 and Hospital admissions, as this is the only pollutant that has a correlation withe the admissions
 with(df, cor(PM2_5,Indicator_value))
 with(df, cor.test(PM2_5,Indicator_value))
 
@@ -50,6 +56,9 @@ summary(model1)
 ```
 
 London Data
+
+In this section we are investigating the correlation between levels of pollutants and emergency Hospital Admissions relating to Respiratory Conditions in Children within Bristol.
+
 
 ```{r}
 file_path <- "/Users/jordannelson/Documents/OneDrive - UWE Bristol Merla Pumffrey/Group Project/Data/London_Respiratory_hospital data.xlsx"
