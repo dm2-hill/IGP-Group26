@@ -58,3 +58,21 @@ summary(model1)
 London Data
 
 In this section we are investigating the correlation between levels of pollutants and emergency Hospital Admissions relating to Respiratory Conditions in Children within Bristol.
+
+```{r}
+df <- readxl::read_xlsx("/Users/danielhill/Documents/MSc Data Science/Interdisciplinary group project/Data/Air_quality_quarterly_london.xlsx", sheet = "Quarterly")
+
+df2 <- readxl::read_xlsx("/Users/danielhill/Documents/MSc Data Science/Interdisciplinary group project/Data/London Respiratory hospital data.xlsx")
+```
+
+```{r}
+
+df2 <- df2[, !colnames(df2) %in% c("Year", "Quarter", "Period of coverage")]
+
+corrs <- cor(df2, use = "pairwise.complete.obs")
+library(corrplot)
+corrplot(corrs, method = "number")
+
+model <- lm(`Indicator value` ~ NO2 + NO + PM10 + `PM2_5`, data = df2)
+summary(model)
+```
