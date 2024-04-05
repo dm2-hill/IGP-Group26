@@ -1,0 +1,62 @@
+---
+title: "Respiratory_Admissions"
+author: "Merla Pumffrey"
+date: "2024-03-19"
+output:
+  word_document: default
+  html_document: default
+---
+
+```         
+```
+
+```         
+```
+
+```{r}
+
+file_path <- "/Users/jordannelson/Documents/OneDrive - UWE Bristol Merla Pumffrey/Group Project/Data/Respiratory_Infection_data.xlsx"
+df <- read_excel(file_path)
+
+#Create subset of the data
+df1 <- df[, c("Indicator_value", "NO2", "NO", "PM10","PM2_5")]
+plot(df1)
+```
+
+```{r}
+#Plot correlations
+corrs <- cor(df1)
+corrplot(corrs, method="number")
+```
+
+```{r}
+with(df, cor(PM2_5,Indicator_value))
+with(df, cor.test(PM2_5,Indicator_value))
+
+# Scatter plot
+library(ggplot2)
+ggplot(df, aes(x=PM2_5, y=Indicator_value)) +
+  geom_point() # + geom_smooth(method="lm")
+
+```
+
+```{r}
+with(df, cor(PM2_5,Indicator_value))
+with(df, cor.test(PM2_5,Indicator_value))
+
+#find intercept, gradient and r-squared
+model1 <- lm(PM2_5~Indicator_value, data=df)
+summary(model1)
+```
+
+London Data
+
+```{r}
+file_path <- "/Users/jordannelson/Documents/OneDrive - UWE Bristol Merla Pumffrey/Group Project/Data/London_Respiratory_hospital data.xlsx"
+#df_london <- read_excel(file_path)
+
+#Create subset of the data
+#dfLDN <- df_london[, c("Indicator_value", "NO2", "NO", "PM10","PM2_5")]
+#plot(dfLDN)}
+
+```
