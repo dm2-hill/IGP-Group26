@@ -1,6 +1,6 @@
 ---
-title: "Respiratory_Admissions"
-author: "Merla Pumffrey"
+title: "Exploring the Relationships between Emergency admissions for children with lower respiratory tract infections (LRTI) with different pollutants in Bristol and London"
+author: "Merla Pumffrey and Daniel Hill"
 date: "2024-03-19"
 output:
   word_document: default
@@ -13,8 +13,19 @@ output:
 ```         
 ```
 
-```{r}
+In this document we are exploring the relationship between emergency admissions for children with lower respiratory tract infections (LRTI) and air pollutants, in both Bristol and London. The emergency admissions dataset was found on the NHS website and contained information for both cities. This is represented by "Indicator Value" in the data frame, which is defined as the indirectly standarised rate of emergency admissions for children with lower respiratory tract infections (LRTI) per 100,000 population in England.
 
+The pollutant data was gathered from Local Authority websites and contained readings of the following pollutants Nitric Oxide (NO, ug/m3), Nitrogen Dioxide (NO2, ug/m3), PM10 Particulate (PM10 ug/m3) PM2.5 Particulate (PM2_5, ug/m3)
+
+**Bristol**
+
+```{r}
+#Read Dataset
+df <- readxl::read_xlsx("/Users/jordannelson/Documents/OneDrive - UWE Bristol Merla Pumffrey/Group Project/Data/Bristol_Respiratory_Infection_data.xlsx")
+
+<<<<<<< HEAD
+#Create subset of the data with relevent fields
+=======
 Bristol
 
 In this section we are investigating the correlation between levels of pollutants and emergency Hospital Admissions relating to Respiratory Conditions in Children within Bristol.
@@ -24,43 +35,89 @@ file_path <- "/Users/jordannelson/Documents/OneDrive - UWE Bristol Merla Pumffre
 df <- read_excel(file_path)
 
 #Create subset of the data
+>>>>>>> 9655ad9996d359c7fc4aa7d241739ec662923914
 df1 <- df[, c("Indicator_value", "NO2", "NO", "PM10","PM2_5")]
-plot(df1)
+
 ```
 
 ```{r}
+library(corrplot)
 #Plot correlations
 corrs <- cor(df1)
 corrplot(corrs, method="number")
 ```
 
+<<<<<<< HEAD
+The correlation matrix above shows us that the indicator value has a moderate (verging on strong) positive correlation with PM2.5, and a weak negative correlation with PM10. The other pollutants have very weak correlation with the indicator value.
+=======
 ```{r}
 #Investigate further the relationship between PM2.5 and Hospital admissions, as this is the only pollutant that has a correlation withe the admissions
 with(df, cor(PM2_5,Indicator_value))
 with(df, cor.test(PM2_5,Indicator_value))
+>>>>>>> 9655ad9996d359c7fc4aa7d241739ec662923914
 
-# Scatter plot
+Due to this we will explore the relationship indicator value and PM2.5 further.
+
+```{r}
+# Produce a scatter plot to visualise the two variables against each other
 library(ggplot2)
 ggplot(df, aes(x=PM2_5, y=Indicator_value)) +
-  geom_point() # + geom_smooth(method="lm")
+  geom_point()  + geom_smooth(method="lm")
 
 ```
 
 ```{r}
-with(df, cor(PM2_5,Indicator_value))
-with(df, cor.test(PM2_5,Indicator_value))
+#Person's Correlation Test
+with(df1, cor(PM2_5,Indicator_value))
+with(df1, cor.test(PM2_5,Indicator_value))
 
-#find intercept, gradient and r-squared
-model1 <- lm(PM2_5~Indicator_value, data=df)
+#Linear model
+model1 <- lm(Indicator_value~PM2_5, data=df)
 summary(model1)
 ```
 
-London Data
+### **Pearson's Product-moment Correlation**
+
+Null Hypothesis: true correlation is equal to 0
+
+Alternative Hypothesis: true correlation is not equal to 0
+
+P-Value = 0.01723
+
+This P-value means that we reject the null hypothesis and we can say that there is a statistical relationship between the indicator value and PM2.5
+
+**Linear Model**
+
+Y-Intercept = 10.337597
+
+Gradient = 0.006646
+
+R-squared = 0.3425
+
+As we have a y-intercept of 10.337597, this gives us an estimate for the indicator value when PM2.5 is 0. However, the p-value associated with the y-intercept is0.7272, which is quite high and suggests that the y-intercept is not statistically significant.
+
+The slope of the line is 0.006646, meaning that for each unit increase in PM2.5 (ug/m3), the indicator value is expected to increase by approximately 0.006646 (children with LRTI per 100,000 population). This effect is statistically significant, as suggested by its p-value of 0.0172.
+
+The R-squared value is 0.3425, indicating that about 34.25% of the variability in Indicator Value is explained by PM2.5.
+
+In summary, the regression suggests a positive and statistically significant relationship between PM2.5 and Indicator Value.
+
+**London**
 
 In this section we are investigating the correlation between levels of pollutants and emergency Hospital Admissions relating to Respiratory Conditions in Children within Bristol.
 
 ```{r}
+<<<<<<< HEAD
+#Read Dataset
+df <- readxl::read_xlsx("/Users/jordannelson/Documents/OneDrive - UWE Bristol Merla Pumffrey/Group Project/Data/London_Respiratory_hospital data.xlsx")
+
+df2 <- readxl::read_xlsx("/Users/jordannelson/Documents/OneDrive - UWE Bristol Merla Pumffrey/Group Project/Data/London_Respiratory_hospital data.xlsx")
+
+#Create subset of the data with relevent fields
+df2 <- df2[, !colnames(df2) %in% c("Year", "Quarter", "Period of coverage")]
+=======
 df <- readxl::read_xlsx("/Users/danielhill/Documents/MSc Data Science/Interdisciplinary group project/Data/Air_quality_quarterly_london.xlsx", sheet = "Quarterly")
+>>>>>>> 9655ad9996d359c7fc4aa7d241739ec662923914
 
 df2 <- readxl::read_xlsx("/Users/danielhill/Documents/MSc Data Science/Interdisciplinary group project/Data/London Respiratory hospital data.xlsx")
 ```
@@ -76,3 +133,94 @@ corrplot(corrs, method = "number")
 model <- lm(`Indicator value` ~ NO2 + NO + PM10 + `PM2_5`, data = df2)
 summary(model)
 ```
+
+```{r}
+#Plot correlations
+corrs <- cor(df2, use = "pairwise.complete.obs")
+library(corrplot)
+corrplot(corrs, method = "number")
+
+```
+
+The correlation matrix above shows us that the indicator value has a moderate positive correlation with Nitrogen and Nitrogen Dioxide.
+
+Due to this we will explore these relationships further.
+
+```{r}
+# Produce a scatter plot to visualise the two variables against each other
+library(ggplot2)
+ggplot(df2, aes(x=NO, y=Indicator_value)) +
+  geom_point() + geom_smooth(method="lm")
+
+ggplot(df2, aes(x=NO2, y=Indicator_value)) +
+  geom_point() + geom_smooth(method="lm")
+```
+
+```{r}
+#Person's Correlation Test for NO
+with(df2, cor(NO,Indicator_value))
+with(df2, cor.test(NO,Indicator_value))
+
+#Person's Correlation Test for NO2
+with(df2, cor(NO2,Indicator_value))
+with(df2, cor.test(NO2,Indicator_value))
+
+#Linear model
+model <- lm(`Indicator_value` ~ NO, data = df2)
+summary(model)
+
+model <- lm(`Indicator_value` ~ NO2, data = df2)
+summary(model)
+```
+
+### **Pearson's Product-moment Correlation for NO**
+
+Null Hypothesis: The true correlation between NO and Indicator value is equal to 0.
+
+Alternative Hypothesis: The true correlation between NO and Indicator value is not equal to 0.
+
+P-Value = 0.01211
+
+This P-value indicates that we reject the null hypothesis and conclude there is a statistically significant relationship between NO and Indicator value. The correlation coefficient of 0.5036226 shows a moderate positive correlation.
+
+### **Pearson's Product-moment Correlation for NO2**
+
+Null Hypothesis: The true correlation between NO2 and Indicator value is equal to 0.
+
+Alternative Hypothesis: The true correlation between NO2 and Indicator value is not equal to 0.
+
+P-Value = 0.01052
+
+The P-value here also leads us to reject the null hypothesis, indicating a statistically significant relationship between NO2 and Indicator value. The correlation coefficient of 0.5120781 shows a moderate positive correlation.
+
+### **Linear Regression Analysis for NO**
+
+Y-Intercept = 19.5025
+
+Gradient for NO = 0.3447
+
+R-squared = 0.2536
+
+As we have a y-intercept of 19.5025, this gives us an estimate for the indicator value when NO is 0, However, the p-value associated with the y-intercept is0.3163, which suggests that the y-intercept is not statistically significant.
+
+The slope of the line is 0.3447, meaning that for each unit increase in NO (ug/m3), the indicator value is expected to increase by approximately 0.3447 (children with LRTI per 100,000 population). This effect is statistically significant, as suggested by its p-value of 0.0121.
+
+The R-squared value is 0.2536, indicating that about 25.36% of the variability in Indicator Value is explained by NO.
+
+In summary, the regression suggests a positive and statistically significant relationship between NO and Indicator Value.
+
+### **Linear Regression Analysis for NO2**
+
+Y-Intercept = -97.4480
+
+Gradient for NO2 = 1.2992
+
+R-squared = 0.2622
+
+As we have a y-intercept of -97.4480, this gives us an estimate for the indicator value when NO is 0, However, the p-value associated with the y-intercept is 0.1146, which suggests that the y-intercept is not statistically significant.
+
+The slope of the line is 1.2992, meaning that for each unit increase in NO2 (ug/m3), the indicator value is expected to increase by approximately 1.2992 (children with LRTI per 100,000 population). This effect is statistically significant, as suggested by its p-value of 0.0105.
+
+The R-squared value is 0.2622, indicating that about 26.22% of the variability in Indicator Value is explained by NO.
+
+In summary, the regression suggests a positive and statistically significant relationship between NO and Indicator Value.
